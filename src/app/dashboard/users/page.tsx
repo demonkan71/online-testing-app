@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Users, CheckCircle, XCircle, Trash2, Edit, AlertTriangle } from 'lucide-react';
+import { Users, CheckCircle, XCircle, Trash2, Edit, AlertTriangle, Search, Filter, Download } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function UsersManagementPage() {
@@ -10,6 +10,8 @@ export default function UsersManagementPage() {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState<string | null>(null);
   const [editFormData, setEditFormData] = useState({ name: '', phone: '', hospital: '' });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('ALL');
 
   const fetchDashboard = async () => {
     try {
@@ -96,6 +98,48 @@ export default function UsersManagementPage() {
 
   const { usersData } = data;
 
+  const filteredUsers = usersData ? usersData.filter((user: any) => {
+    // Search match
+    const searchString = `${user.name} ${user.phone} ${user.hospital}`.toLowerCase();
+    const matchesSearch = searchString.includes(searchTerm.toLowerCase());
+    
+    // Filter match
+    let matchesFilter = true;
+    if (filterStatus === 'PASSED') matchesFilter = user.isPassed === true;
+    if (filterStatus === 'FAILED') matchesFilter = user.isPassed === false;
+    if (filterStatus === 'NOT_TAKEN') matchesFilter = user.isPassed === null;
+
+    return matchesSearch && matchesFilter;
+  }) : [];
+
+  const handleExportCSV = () => {
+    if (!filteredUsers || filteredUsers.length === 0) return alert('ไม่มีข้อมูลสำหรับส่งออก');
+    
+    const headers = ['ชื่อ - นามสกุล', 'เบอร์โทรศัพท์', 'หน่วยงาน', 'Pretest (%)', 'Posttest (%)', 'สถานะ'];
+    const rows = filteredUsers.map((u: any) => [
+      u.name,
+      u.phone,
+      u.hospital,
+      u.pretestScore !== null ? Number(u.pretestScore).toFixed(0) : '-',
+      u.posttestScore !== null ? Number(u.posttestScore).toFixed(0) : '-',
+      u.isPassed === true ? 'ผ่าน' : u.isPassed === false ? 'ไม่ผ่าน' : 'ยังไม่ประเมิน'
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((row: any[]) => row.map((cell: any) => `"${cell}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' }); // \uFEFF for Excel UTF-8 BOM
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `ประเมินความรู้_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-10">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -117,6 +161,43 @@ export default function UsersManagementPage() {
       </div>
 
       <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+        {/* Search, Filter, Export Bar */}
+        <div className="p-4 border-b border-gray-100 bg-gray-50/50 flex flex-col md:flex-row gap-4 justify-between items-center">
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input 
+                type="text" 
+                placeholder="ค้นหาชื่อ, เบอร์โทร..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+            <div className="relative flex items-center">
+              <Filter className="w-4 h-4 absolute left-3 text-gray-400" />
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="pl-9 pr-8 py-2 border border-gray-200 rounded-lg text-sm appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 w-full sm:w-auto"
+              >
+                <option value="ALL">ทั้งหมด</option>
+                <option value="PASSED">สอบผ่าน</option>
+                <option value="FAILED">สอบไม่ผ่าน</option>
+                <option value="NOT_TAKEN">ยังไม่ประเมิน</option>
+              </select>
+            </div>
+          </div>
+          
+          <button
+            onClick={handleExportCSV}
+            className="flex items-center px-4 py-2 bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white rounded-lg font-semibold transition-colors border border-emerald-200 hover:border-emerald-600 w-full md:w-auto justify-center"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export Excel (CSV)
+          </button>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
@@ -131,7 +212,7 @@ export default function UsersManagementPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {usersData && usersData.map((user: any) => (
+              {filteredUsers && filteredUsers.map((user: any) => (
                 <tr key={user.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-4 font-medium text-gray-900">
                     {editMode === user.id ? (
@@ -221,10 +302,10 @@ export default function UsersManagementPage() {
                   </td>
                 </tr>
               ))}
-              {(!usersData || usersData.length === 0) && (
+              {(!filteredUsers || filteredUsers.length === 0) && (
                 <tr>
                   <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
-                    ยังไม่มีข้อมูลผู้เข้าร่วมการประเมิน
+                    ไม่พบข้อมูลผู้เข้าร่วมการประเมิน
                   </td>
                 </tr>
               )}

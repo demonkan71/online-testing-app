@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { LayoutDashboard, FileQuestion, LogOut, Users, Menu, X } from 'lucide-react';
+import { LayoutDashboard, FileQuestion, LogOut, Users, Menu, X, Settings } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -84,6 +84,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           >
             <FileQuestion className="w-5 h-5" />
             <span>จัดการข้อสอบ</span>
+          </Link>
+
+          <Link 
+            href="/dashboard/settings"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+              pathname === '/dashboard/settings' 
+                ? 'bg-gradient-to-r from-pink-500 to-rose-400 text-white shadow-md shadow-pink-200 font-bold scale-105' 
+                : 'text-gray-600 hover:bg-white/60 hover:text-pink-600 hover:shadow-sm font-medium'
+            }`}
+          >
+            <Settings className="w-5 h-5" />
+            <span>ตั้งค่าระบบ</span>
           </Link>
         </nav>
 

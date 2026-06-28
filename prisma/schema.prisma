@@ -72,3 +72,9 @@ model Certificate {
   isEmailSent Boolean  @default(false)
   createdAt   DateTime @default(now())
 }
+
+model SystemSetting {
+  key       String   @id
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt
+}

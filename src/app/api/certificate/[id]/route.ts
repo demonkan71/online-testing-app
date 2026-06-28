@@ -35,31 +35,70 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const page = pdfDoc.addPage([842, 595]); // A4 landscape
     const { width, height } = page.getSize();
 
-    // Load and Draw Background Image Template
-    const bgPath = path.join(process.cwd(), 'public', 'cert-bg.png');
-    if (fs.existsSync(bgPath)) {
-      const bgImageBytes = fs.readFileSync(bgPath);
-      const bgImage = await pdfDoc.embedPng(bgImageBytes);
-      page.drawImage(bgImage, {
-        x: 0, 
-        y: 0, 
-        width: width, 
-        height: height
-      });
+    // Fetch Settings
+    const settingsList = await prisma.systemSetting.findMany({
+      where: { key: { in: ['CERTIFICATE_BG', 'CERTIFICATE_Y_POS', 'CERTIFICATE_FONT_SIZE'] } }
+    });
+    
+    const settings = settingsList.reduce((acc, curr) => {
+      acc[curr.key] = curr.value;
+      return acc;
+    }, {} as Record<string, string>);
+
+    let customBgLoaded = false;
+
+    if (settings.CERTIFICATE_BG) {
+      try {
+        const dataUrl = settings.CERTIFICATE_BG;
+        const base64Data = dataUrl.split(',')[1];
+        const mimeType = dataUrl.split(';')[0].split(':')[1];
+        const imageBytes = Buffer.from(base64Data, 'base64');
+        
+        let bgImage;
+        if (mimeType === 'image/jpeg' || mimeType === 'image/jpg') {
+          bgImage = await pdfDoc.embedJpg(imageBytes);
+        } else {
+          bgImage = await pdfDoc.embedPng(imageBytes);
+        }
+        
+        page.drawImage(bgImage, {
+          x: 0, 
+          y: 0, 
+          width: width, 
+          height: height
+        });
+        customBgLoaded = true;
+      } catch (err) {
+        console.error('Failed to load custom background:', err);
+      }
+    }
+
+    // Fallback to default
+    if (!customBgLoaded) {
+      const bgPath = path.join(process.cwd(), 'public', 'cert-bg.png');
+      if (fs.existsSync(bgPath)) {
+        const bgImageBytes = fs.readFileSync(bgPath);
+        const bgImage = await pdfDoc.embedPng(bgImageBytes);
+        page.drawImage(bgImage, {
+          x: 0, 
+          y: 0, 
+          width: width, 
+          height: height
+        });
+      }
     }
 
     // Draw Name
     const name = submission.user.name;
-    const fontSize = 40;
+    const fontSize = settings.CERTIFICATE_FONT_SIZE ? parseInt(settings.CERTIFICATE_FONT_SIZE) : 40;
     const nameWidth = customFont.widthOfTextAtSize(name, fontSize);
+    const yPos = settings.CERTIFICATE_Y_POS ? parseInt(settings.CERTIFICATE_Y_POS) : (height - 236);
     
-    // The [NAME] placeholder in the template is roughly at y: height - 236
     page.drawText(name, {
       x: (width - nameWidth) / 2, 
-      y: height - 236, 
+      y: yPos, 
       size: fontSize, 
       font: customFont, 
-      // Use olive green matching the template: RGB(107, 112, 63)
       color: rgb(107/255, 112/255, 63/255)
     });
 
