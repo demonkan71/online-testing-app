@@ -3,23 +3,42 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    // Basic stats
-    const totalUsers = await prisma.user.count();
-    
-    // Posttest submissions
-    const posttestSubmissions = await prisma.submission.findMany({
-      where: { exam: { type: 'POSTTEST' } },
-      include: { user: true }
-    });
-
-    const pretestSubmissions = await prisma.submission.findMany({
-      where: { exam: { type: 'PRETEST' } },
-      include: { user: true }
-    });
+    // Fetch all required data concurrently for much better performance
+    const [
+      totalUsers,
+      posttestSubmissions,
+      pretestSubmissions,
+      incorrectAnswers,
+      allUsers
+    ] = await Promise.all([
+      prisma.user.count(),
+      prisma.submission.findMany({
+        where: { exam: { type: 'POSTTEST' } },
+        include: { user: true }
+      }),
+      prisma.submission.findMany({
+        where: { exam: { type: 'PRETEST' } },
+        include: { user: true }
+      }),
+      prisma.submissionAnswer.findMany({
+        where: {
+          isCorrect: false,
+          submission: { exam: { type: 'POSTTEST' } }
+        },
+        include: { question: true }
+      }),
+      prisma.user.findMany({
+        include: {
+          submissions: {
+            include: { exam: true }
+          }
+        },
+        orderBy: { createdAt: 'desc' }
+      })
+    ]);
 
     const totalPassed = posttestSubmissions.filter(s => s.isPassed).length;
     const totalFailed = posttestSubmissions.filter(s => !s.isPassed).length;
-
     const pretestPassed = pretestSubmissions.filter(s => s.isPassed).length;
 
     // Chart: Pass vs Fail (Posttest)
@@ -51,16 +70,6 @@ export async function GET() {
     const pretestLeaderboard = getLeaderboard(pretestSubmissions);
     const posttestLeaderboard = getLeaderboard(posttestSubmissions);
 
-    // Most incorrect questions
-    // Get all submission answers that are incorrect for Posttest
-    const incorrectAnswers = await prisma.submissionAnswer.findMany({
-      where: {
-        isCorrect: false,
-        submission: { exam: { type: 'POSTTEST' } }
-      },
-      include: { question: true }
-    });
-
     const questionErrorMap: Record<string, { content: string, count: number }> = {};
     incorrectAnswers.forEach(ans => {
       if (!questionErrorMap[ans.questionId]) {
@@ -74,15 +83,6 @@ export async function GET() {
       .slice(0, 5);
 
     // Users list for the table
-    const allUsers = await prisma.user.findMany({
-      include: {
-        submissions: {
-          include: { exam: true }
-        }
-      },
-      orderBy: { createdAt: 'desc' }
-    });
-
     const usersData = allUsers.map(u => {
       const pretest = u.submissions.find(s => s.exam.type === 'PRETEST');
       const posttest = u.submissions.find(s => s.exam.type === 'POSTTEST');
