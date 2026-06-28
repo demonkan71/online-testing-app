@@ -27,7 +27,7 @@ export default function DashboardPage() {
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-50">กำลังโหลดข้อมูล Dashboard...</div>;
   if (!data) return <div className="min-h-screen flex items-center justify-center bg-gray-50">ไม่สามารถโหลดข้อมูลได้</div>;
 
-  const { metrics, charts, leaderboards, usersData } = data;
+  const { metrics, charts, leaderboards } = data;
 
   const MetricCard = ({ title, value, icon: Icon, colorClass, borderClass }: any) => (
     <div className={`bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border ${borderClass} p-6 flex items-center relative overflow-hidden group`}>
@@ -176,65 +176,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* User Data Table */}
-        <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden mt-8">
-          <div className="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-bold text-white flex items-center">
-              <Users className="w-5 h-5 mr-2" /> รายชื่อผู้เข้ารับการประเมิน
-            </h2>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-gray-500">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
-                <tr>
-                  <th className="px-6 py-4 font-bold">ชื่อ - นามสกุล</th>
-                  <th className="px-6 py-4 font-bold">เบอร์โทรศัพท์</th>
-                  <th className="px-6 py-4 font-bold">หน่วยงาน</th>
-                  <th className="px-6 py-4 font-bold text-center">Pretest (%)</th>
-                  <th className="px-6 py-4 font-bold text-center">Posttest (%)</th>
-                  <th className="px-6 py-4 font-bold text-center">สถานะ</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {usersData && usersData.map((user: any) => (
-                  <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">{user.name}</td>
-                    <td className="px-6 py-4">{user.phone}</td>
-                    <td className="px-6 py-4">{user.hospital}</td>
-                    <td className="px-6 py-4 text-center font-semibold text-gray-700">
-                      {user.pretestScore !== null ? Number(user.pretestScore).toFixed(0) : '-'}
-                    </td>
-                    <td className="px-6 py-4 text-center font-semibold text-gray-700">
-                      {user.posttestScore !== null ? Number(user.posttestScore).toFixed(0) : '-'}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {user.isPassed === true ? (
-                        <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full flex items-center justify-center w-max mx-auto">
-                          <CheckCircle className="w-3 h-3 mr-1" /> ผ่าน
-                        </span>
-                      ) : user.isPassed === false ? (
-                        <span className="bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full flex items-center justify-center w-max mx-auto">
-                          <XCircle className="w-3 h-3 mr-1" /> ไม่ผ่าน
-                        </span>
-                      ) : (
-                        <span className="bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full">
-                          ยังไม่ประเมิน
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-                {(!usersData || usersData.length === 0) && (
-                  <tr>
-                    <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
-                      ยังไม่มีข้อมูลผู้เข้ารับการประเมิน
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+
 
     </div>
   );
