@@ -122,7 +122,7 @@ export default function UsersManagementPage() {
 
   const getEvaluation = (score: number | null) => {
     if (score === null) return '-';
-    if (score >= 60) return 'ดีมาก';
+    if (score >= 80) return 'ดีมาก';
     if (score >= 55) return 'ดี';
     if (score >= 30) return 'พอใช้';
     return 'ควรทบทวน';
@@ -310,9 +310,9 @@ export default function UsersManagementPage() {
                   <td className="px-4 py-4 text-center">
                     {user.posttestScore !== null ? (
                       <span className={`text-xs font-bold px-3 py-1 rounded-full flex items-center justify-center w-max mx-auto ${
-                        user.posttestScore >= 60 ? 'bg-green-100 text-green-800' :
-                        user.posttestScore >= 55 ? 'bg-blue-100 text-blue-800' :
-                        user.posttestScore >= 30 ? 'bg-yellow-100 text-yellow-800' :
+                        user.posttestScore >= 80 ? 'bg-blue-100 text-blue-800' :
+                        user.posttestScore >= 55 ? 'bg-green-100 text-green-800' :
+                        user.posttestScore >= 30 ? 'bg-orange-100 text-orange-800' :
                         'bg-red-100 text-red-800'
                       }`}>
                         {getEvaluation(user.posttestScore)}

@@ -51,12 +51,12 @@ export default function ResultPage({ params }: { params: Promise<{ type: string 
               <div className="mt-4 p-4 rounded-lg bg-gray-50 border border-gray-100">
                 <p className="text-sm text-gray-500 mb-1">ผลการประเมินของคุณอยู่ในเกณฑ์</p>
                 <div className={`text-2xl font-bold ${
-                  Number(result.score) >= 60 ? 'text-green-600' :
-                  Number(result.score) >= 55 ? 'text-blue-600' :
-                  Number(result.score) >= 30 ? 'text-yellow-600' :
+                  Number(result.score) >= 80 ? 'text-blue-600' :
+                  Number(result.score) >= 55 ? 'text-green-600' :
+                  Number(result.score) >= 30 ? 'text-orange-600' :
                   'text-red-600'
                 }`}>
-                  {Number(result.score) >= 60 ? 'ดีมาก' :
+                  {Number(result.score) >= 80 ? 'ดีมาก' :
                    Number(result.score) >= 55 ? 'ดี' :
                    Number(result.score) >= 30 ? 'พอใช้' :
                    'ควรทบทวน'}
