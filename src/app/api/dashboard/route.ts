@@ -79,9 +79,10 @@ export async function GET() {
     ];
 
     // Leaderboards (Only On-Site users)
-    const getLeaderboard = (submissions: any[]) => {
+    const getLeaderboard = (submissions: any[], extraCondition?: (s: any) => boolean) => {
       return submissions
         .filter(s => s.user.attendanceType === 'On-Site')
+        .filter(s => extraCondition ? extraCondition(s) : true)
         .sort((a, b) => {
           if (b.score !== a.score) return b.score - a.score;
           return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(); // Earlier submission wins tie
@@ -99,6 +100,8 @@ export async function GET() {
 
     const pretestLeaderboard = getLeaderboard(pretestSubmissions);
     const posttestLeaderboard = getLeaderboard(posttestSubmissions);
+    const officerPretestLeaderboard = getLeaderboard(pretestSubmissions, s => s.user.occupation === 'เจ้าหน้าที่');
+    const officerPosttestLeaderboard = getLeaderboard(posttestSubmissions, s => s.user.occupation === 'เจ้าหน้าที่');
 
     const questionErrorMap: Record<string, { content: string, count: number }> = {};
     incorrectAnswers.forEach(ans => {
@@ -143,7 +146,9 @@ export async function GET() {
       },
       leaderboards: {
         pretest: pretestLeaderboard,
-        posttest: posttestLeaderboard
+        posttest: posttestLeaderboard,
+        officerPretest: officerPretestLeaderboard,
+        officerPosttest: officerPosttestLeaderboard
       },
       usersData
     });

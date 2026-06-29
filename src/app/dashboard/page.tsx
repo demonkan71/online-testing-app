@@ -248,6 +248,67 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Officer Leaderboards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-500 px-6 py-4 border-b border-blue-100">
+              <h2 className="text-lg font-bold text-white flex items-center">
+                <LayoutDashboard className="w-5 h-5 mr-2" /> Leaderboard - Pretest (เฉพาะเจ้าหน้าที่)
+              </h2>
+            </div>
+            <ul className="divide-y divide-gray-100">
+              {(leaderboards.officerPretest || []).map((user: any, index: number) => (
+                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-blue-50 transition-colors">
+                  <div className="flex items-center">
+                    <span className="w-10 h-10 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
+                      {index + 1}
+                    </span>
+                    <div>
+                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
+                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
+                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
+                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
+                      </p>
+                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
+                    </div>
+                  </div>
+                  <span className="text-lg font-black text-blue-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                </li>
+              ))}
+              {(!leaderboards.officerPretest || leaderboards.officerPretest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
+            </ul>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-indigo-500 to-purple-500 px-6 py-4 border-b border-indigo-100">
+              <h2 className="text-lg font-bold text-white flex items-center">
+                <CheckCircle className="w-5 h-5 mr-2" /> Leaderboard - Posttest (เฉพาะเจ้าหน้าที่)
+              </h2>
+            </div>
+            <ul className="divide-y divide-gray-100">
+              {(leaderboards.officerPosttest || []).map((user: any, index: number) => (
+                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-indigo-50 transition-colors">
+                  <div className="flex items-center">
+                    <span className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
+                      {index + 1}
+                    </span>
+                    <div>
+                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
+                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
+                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
+                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
+                      </p>
+                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
+                    </div>
+                  </div>
+                  <span className="text-lg font-black text-indigo-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                </li>
+              ))}
+              {(!leaderboards.officerPosttest || leaderboards.officerPosttest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
+            </ul>
+          </div>
+        </div>
+
     </div>
   );
 }
