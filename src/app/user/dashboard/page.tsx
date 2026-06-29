@@ -93,7 +93,7 @@ export default function UserDashboard() {
             {data.pretest ? (
               <div className="bg-gray-50 rounded-lg p-4 border border-gray-100 text-center">
                 <p className="text-sm text-gray-500 font-medium mb-1">คะแนนของคุณ</p>
-                <p className="text-3xl font-black text-emerald-700">{Number(data.pretest.score).toFixed(0)}%</p>
+                <p className="text-3xl font-black text-emerald-700">{(Number(data.pretest.score) / 5).toFixed(0)}/20</p>
                 {data.pretest.rank && (
                   <div className="mt-3 inline-flex items-center text-xs font-medium bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">
                     <Trophy className="w-3 h-3 mr-1" /> อันดับที่ {data.pretest.rank} จาก {data.pretest.total} คน
@@ -130,7 +130,7 @@ export default function UserDashboard() {
                   {data.posttest.isPassed ? 'คุณสอบผ่าน' : 'คุณสอบไม่ผ่าน'}
                 </p>
                 <p className={`text-3xl font-black ${data.posttest.isPassed ? 'text-green-700' : 'text-red-700'}`}>
-                  {Number(data.posttest.score).toFixed(0)}%
+                  {(Number(data.posttest.score) / 5).toFixed(0)}/20
                 </p>
                 {data.posttest.rank && (
                   <div className={`mt-3 inline-flex items-center text-xs font-medium px-3 py-1 rounded-full ${data.posttest.isPassed ? 'bg-green-200 text-green-800' : 'bg-red-100 text-red-800'}`}>

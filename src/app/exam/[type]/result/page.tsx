@@ -45,7 +45,7 @@ export default function ResultPage({ params }: { params: Promise<{ type: string 
             <div className="text-5xl font-black text-gray-900">
               {result.correctCount} <span className="text-2xl text-gray-400 font-medium">/ {result.total}</span>
             </div>
-            <p className="mt-2 text-emerald-600 font-semibold mb-4">{Number(result.score).toFixed(0)}%</p>
+
             
             {type === 'posttest' && (
               <div className="mt-4 p-4 rounded-lg bg-gray-50 border border-gray-100">

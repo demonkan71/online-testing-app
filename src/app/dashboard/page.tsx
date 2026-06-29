@@ -212,7 +212,7 @@ export default function DashboardPage() {
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
                   </div>
-                  <span className="text-lg font-black text-emerald-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                  <span className="text-lg font-black text-emerald-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
               ))}
               {leaderboards.pretest.length === 0 && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
@@ -242,7 +242,7 @@ export default function DashboardPage() {
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
                   </div>
-                  <span className="text-lg font-black text-green-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                  <span className="text-lg font-black text-green-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
               ))}
               {leaderboards.posttest.length === 0 && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
@@ -275,7 +275,7 @@ export default function DashboardPage() {
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
                   </div>
-                  <span className="text-lg font-black text-blue-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                  <span className="text-lg font-black text-blue-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
               ))}
               {(!leaderboards.officerPretest || leaderboards.officerPretest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
@@ -305,7 +305,7 @@ export default function DashboardPage() {
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
                   </div>
-                  <span className="text-lg font-black text-indigo-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                  <span className="text-lg font-black text-indigo-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
               ))}
               {(!leaderboards.officerPosttest || leaderboards.officerPosttest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
@@ -338,7 +338,7 @@ export default function DashboardPage() {
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
                   </div>
-                  <span className="text-lg font-black text-pink-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                  <span className="text-lg font-black text-pink-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
               ))}
               {(!leaderboards.onlinePretest || leaderboards.onlinePretest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
@@ -368,7 +368,7 @@ export default function DashboardPage() {
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
                   </div>
-                  <span className="text-lg font-black text-rose-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                  <span className="text-lg font-black text-rose-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
               ))}
               {(!leaderboards.onlinePosttest || leaderboards.onlinePosttest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
@@ -401,7 +401,7 @@ export default function DashboardPage() {
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
                   </div>
-                  <span className="text-lg font-black text-orange-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                  <span className="text-lg font-black text-orange-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
               ))}
               {(!leaderboards.onlineOfficerPretest || leaderboards.onlineOfficerPretest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
@@ -431,7 +431,7 @@ export default function DashboardPage() {
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
                   </div>
-                  <span className="text-lg font-black text-amber-600 ml-4">{Number(user.score).toFixed(0)}%</span>
+                  <span className="text-lg font-black text-amber-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
               ))}
               {(!leaderboards.onlineOfficerPosttest || leaderboards.onlineOfficerPosttest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}

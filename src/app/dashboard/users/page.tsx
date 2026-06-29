@@ -131,7 +131,7 @@ export default function UsersManagementPage() {
   const handleExportCSV = () => {
     if (!filteredUsers || filteredUsers.length === 0) return alert('ไม่มีข้อมูลสำหรับส่งออก');
     
-    const headers = ['ชื่อ - นามสกุล', 'เบอร์โทรศัพท์', 'อำเภอ', 'อาชีพ', 'รูปแบบ', 'หน่วยงาน', 'Pretest (%)', 'Posttest (%)', 'ผลประเมิน Posttest'];
+    const headers = ['ชื่อ - นามสกุล', 'เบอร์โทรศัพท์', 'อำเภอ', 'อาชีพ', 'รูปแบบ', 'หน่วยงาน', 'Pretest (คะแนน)', 'Posttest (คะแนน)', 'ผลประเมิน Posttest'];
     const rows = filteredUsers.map((u: any) => [
       u.name,
       u.phone,
@@ -139,8 +139,8 @@ export default function UsersManagementPage() {
       u.occupation || '-',
       u.attendanceType || '-',
       u.hospital || '-',
-      u.pretestScore !== null ? Number(u.pretestScore).toFixed(0) : '-',
-      u.posttestScore !== null ? Number(u.posttestScore).toFixed(0) : '-',
+      u.pretestScore !== null ? (Number(u.pretestScore) / 5).toFixed(0) : '-',
+      u.posttestScore !== null ? (Number(u.posttestScore) / 5).toFixed(0) : '-',
       getEvaluation(u.posttestScore)
     ]);
 
@@ -302,10 +302,10 @@ export default function UsersManagementPage() {
                     ) : (user.hospital || '-')}
                   </td>
                   <td className="px-4 py-4 text-center font-semibold text-gray-700">
-                    {user.pretestScore !== null ? Number(user.pretestScore).toFixed(0) + '%' : '-'}
+                    {user.pretestScore !== null ? (Number(user.pretestScore) / 5).toFixed(0) : '-'}
                   </td>
                   <td className="px-4 py-4 text-center font-semibold text-gray-700">
-                    {user.posttestScore !== null ? Number(user.posttestScore).toFixed(0) + '%' : '-'}
+                    {user.posttestScore !== null ? (Number(user.posttestScore) / 5).toFixed(0) : '-'}
                   </td>
                   <td className="px-4 py-4 text-center">
                     {user.posttestScore !== null ? (
