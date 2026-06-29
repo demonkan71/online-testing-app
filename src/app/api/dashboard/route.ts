@@ -93,13 +93,14 @@ export async function GET() {
           name: s.user.name,
           district: s.user.district,
           occupation: s.user.occupation,
+          attendanceType: s.user.attendanceType,
           score: s.score,
           submittedAt: s.createdAt
         }));
     };
 
-    const pretestLeaderboard = getLeaderboard(pretestSubmissions);
-    const posttestLeaderboard = getLeaderboard(posttestSubmissions);
+    const pretestLeaderboard = getLeaderboard(pretestSubmissions, s => s.user.occupation === 'อสม.');
+    const posttestLeaderboard = getLeaderboard(posttestSubmissions, s => s.user.occupation === 'อสม.');
     const officerPretestLeaderboard = getLeaderboard(pretestSubmissions, s => s.user.occupation === 'เจ้าหน้าที่');
     const officerPosttestLeaderboard = getLeaderboard(posttestSubmissions, s => s.user.occupation === 'เจ้าหน้าที่');
 

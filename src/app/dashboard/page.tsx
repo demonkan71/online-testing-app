@@ -192,7 +192,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden">
             <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-4 border-b border-emerald-100">
               <h2 className="text-lg font-bold text-white flex items-center">
-                <LayoutDashboard className="w-5 h-5 mr-2" /> Leaderboard - Pretest (เฉพาะ On-Site)
+                <LayoutDashboard className="w-5 h-5 mr-2" /> Leaderboard - Pretest (อสม.)
               </h2>
             </div>
             <ul className="divide-y divide-gray-100">
@@ -207,6 +207,7 @@ export default function DashboardPage() {
                       <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
                         <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
                         <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
+                        <span className="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
                       </p>
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
@@ -221,7 +222,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden">
             <div className="bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-4 border-b border-green-100">
               <h2 className="text-lg font-bold text-white flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" /> Leaderboard - Posttest (เฉพาะ On-Site)
+                <CheckCircle className="w-5 h-5 mr-2" /> Leaderboard - Posttest (อสม.)
               </h2>
             </div>
             <ul className="divide-y divide-gray-100">
@@ -236,6 +237,7 @@ export default function DashboardPage() {
                       <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
                         <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
                         <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
+                        <span className="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
                       </p>
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
@@ -268,6 +270,7 @@ export default function DashboardPage() {
                       <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
                         <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
                         <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
+                        <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
                       </p>
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
@@ -297,6 +300,7 @@ export default function DashboardPage() {
                       <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
                         <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
                         <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
+                        <span className="bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
                       </p>
                       <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                     </div>
