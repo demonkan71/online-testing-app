@@ -170,9 +170,10 @@ export default function Home() {
                     onChange={(e) => setFormData({ ...formData, hospital: e.target.value })}
                   >
                     <option value="" disabled>-- เลือกหน่วยงาน --</option>
-                    <option value="รพศ/รพท">รพศ/รพท</option>
-                    <option value="รพช.">รพช.</option>
-                    <option value="สสอ.">สสอ.</option>
+                    <option value="โรงพยาบาลศูนย์/โรงพยาบาลทั่วไป">โรงพยาบาลศูนย์/โรงพยาบาลทั่วไป</option>
+                    <option value="โรงพยาบาลชุมชน">โรงพยาบาลชุมชน</option>
+                    <option value="สำนักงานสาธารณสุขอำเภอ">สำนักงานสาธารณสุขอำเภอ</option>
+                    <option value="สำนักงานสาธารณสุขจังหวัดกาญจนบุรี">สำนักงานสาธารณสุขจังหวัดกาญจนบุรี</option>
                   </select>
                 </div>
               </div>
