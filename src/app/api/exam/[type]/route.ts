@@ -75,9 +75,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ type: s
     const score = (correctCount / totalQuestions) * 100;
     
     // Passing criteria
-    // For PRETEST, we can just say passed if > 0 or whatever, but user wants to show actual score.
-    // For POSTTEST, must be >= 80%
-    const isPassed = examType === 'POSTTEST' ? score >= 80 : score >= 0; // Pretest always true for isPassed logic, or define another logic. Wait, let's just use score >= 50 for pretest pass/fail visually, but actual score is shown. The user said: "แสดงคะแนนตามจริงที่ทำได้ พร้อมสรุปว่า ผ่าน หรือ ไม่ผ่าน" (I'll use 50% for Pretest passing criteria, 80% for Posttest)
+    // For POSTTEST, must be >= 60%
+    const isPassed = examType === 'POSTTEST' ? score >= 60 : score >= 0; 
 
     const isPassedStrict = examType === 'POSTTEST' ? score >= 60 : score >= 50;
 

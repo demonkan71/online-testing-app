@@ -121,7 +121,7 @@ export default function UserDashboard() {
                   <BookOpen className="text-emerald-500 w-6 h-6" />
                 )}
               </div>
-              <p className="text-gray-500 text-sm mb-6">แบบทดสอบหลังเรียน (เกณฑ์ผ่าน 80%)</p>
+              <p className="text-gray-500 text-sm mb-6">แบบทดสอบหลังเรียน (เกณฑ์ผ่าน 60%)</p>
             </div>
             
             {data.posttest ? (
