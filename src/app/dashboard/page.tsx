@@ -14,7 +14,7 @@ const CollapsibleLeaderboard = ({
   scoreColor, 
   hoverBg 
 }: any) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   
   return (
     <div className={`bg-white rounded-2xl shadow-md border ${borderColor} overflow-hidden`}>
