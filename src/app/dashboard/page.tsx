@@ -2,7 +2,60 @@
 
 import { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Users, CheckCircle, XCircle, LayoutDashboard, Stethoscope, Building2, MapPin, MonitorPlay, Users2 } from 'lucide-react';
+import { Users, CheckCircle, XCircle, LayoutDashboard, Stethoscope, Building2, MapPin, MonitorPlay, Users2, ChevronDown, ChevronUp } from 'lucide-react';
+
+const CollapsibleLeaderboard = ({ 
+  title, 
+  icon: Icon, 
+  dataList, 
+  gradientClass, 
+  borderColor, 
+  iconBgColor, 
+  scoreColor, 
+  hoverBg 
+}: any) => {
+  const [isOpen, setIsOpen] = useState(true);
+  
+  return (
+    <div className={`bg-white rounded-2xl shadow-md border ${borderColor} overflow-hidden`}>
+      <div 
+        className={`${gradientClass} px-6 py-4 border-b ${borderColor} cursor-pointer flex justify-between items-center`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <h2 className="text-lg font-bold text-white flex items-center">
+          <Icon className="w-5 h-5 mr-2" /> {title}
+        </h2>
+        <div className="text-white opacity-80">
+          {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+        </div>
+      </div>
+      {isOpen && (
+        <ul className="divide-y divide-gray-100">
+          {dataList?.map((user: any, index: number) => (
+            <li key={user.id} className={`px-6 py-4 flex items-center justify-between ${hoverBg} transition-colors`}>
+              <div className="flex items-center">
+                <span className={`w-10 h-10 rounded-full ${iconBgColor} flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]`}>
+                  {index + 1}
+                </span>
+                <div>
+                  <p className="text-sm font-bold text-gray-800">{user.name}</p>
+                  <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
+                    <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
+                    <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
+                    <span className="bg-gray-50 text-gray-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
+                  </p>
+                  <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
+                </div>
+              </div>
+              <span className={`text-lg font-black ${scoreColor} ml-4`}>{(Number(user.score) / 5).toFixed(0)}/20</span>
+            </li>
+          ))}
+          {(!dataList || dataList.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
+        </ul>
+      )}
+    </div>
+  );
+};
 
 export default function DashboardPage() {
   const [data, setData] = useState<any>(null);
@@ -185,251 +238,31 @@ export default function DashboardPage() {
           </div>
         </div>
 
-
-
         {/* Leaderboards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-4 border-b border-emerald-100">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <LayoutDashboard className="w-5 h-5 mr-2" /> Leaderboard - Pretest (อสม.)
-              </h2>
-            </div>
-            <ul className="divide-y divide-gray-100">
-              {leaderboards.pretest.map((user: any, index: number) => (
-                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-emerald-50 transition-colors">
-                  <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                        <span className="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
-                    </div>
-                  </div>
-                  <span className="text-lg font-black text-emerald-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
-                </li>
-              ))}
-              {leaderboards.pretest.length === 0 && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
-            </ul>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-4 border-b border-green-100">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" /> Leaderboard - Posttest (อสม.)
-              </h2>
-            </div>
-            <ul className="divide-y divide-gray-100">
-              {leaderboards.posttest.map((user: any, index: number) => (
-                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-green-50 transition-colors">
-                  <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-green-100 text-green-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                        <span className="bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
-                    </div>
-                  </div>
-                  <span className="text-lg font-black text-green-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
-                </li>
-              ))}
-              {leaderboards.posttest.length === 0 && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
-            </ul>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <CollapsibleLeaderboard 
+            title="Leaderboard - Pretest (อสม.)"
+            icon={LayoutDashboard}
+            dataList={leaderboards.pretest}
+            gradientClass="bg-gradient-to-r from-emerald-500 to-teal-500"
+            borderColor="border-emerald-100"
+            iconBgColor="bg-emerald-100 text-emerald-800"
+            scoreColor="text-emerald-600"
+            hoverBg="hover:bg-emerald-50"
+          />
+          <CollapsibleLeaderboard 
+            title="Leaderboard - Posttest (อสม.)"
+            icon={CheckCircle}
+            dataList={leaderboards.posttest}
+            gradientClass="bg-gradient-to-r from-green-500 to-emerald-500"
+            borderColor="border-emerald-100"
+            iconBgColor="bg-green-100 text-green-800"
+            scoreColor="text-green-600"
+            hoverBg="hover:bg-green-50"
+          />
         </div>
 
         {/* Officer Leaderboards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-500 to-indigo-500 px-6 py-4 border-b border-blue-100">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <LayoutDashboard className="w-5 h-5 mr-2" /> Leaderboard - Pretest (เฉพาะเจ้าหน้าที่)
-              </h2>
-            </div>
-            <ul className="divide-y divide-gray-100">
-              {(leaderboards.officerPretest || []).map((user: any, index: number) => (
-                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-blue-50 transition-colors">
-                  <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                        <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
-                    </div>
-                  </div>
-                  <span className="text-lg font-black text-blue-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
-                </li>
-              ))}
-              {(!leaderboards.officerPretest || leaderboards.officerPretest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
-            </ul>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-md border border-emerald-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-indigo-500 to-purple-500 px-6 py-4 border-b border-indigo-100">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" /> Leaderboard - Posttest (เฉพาะเจ้าหน้าที่)
-              </h2>
-            </div>
-            <ul className="divide-y divide-gray-100">
-              {(leaderboards.officerPosttest || []).map((user: any, index: number) => (
-                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-indigo-50 transition-colors">
-                  <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                        <span className="bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
-                    </div>
-                  </div>
-                  <span className="text-lg font-black text-indigo-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
-                </li>
-              ))}
-              {(!leaderboards.officerPosttest || leaderboards.officerPosttest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
-            </ul>
-          </div>
-        </div>
-
-        {/* Online OSM Leaderboards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl shadow-md border border-pink-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-pink-500 to-rose-500 px-6 py-4 border-b border-pink-100">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <LayoutDashboard className="w-5 h-5 mr-2" /> Leaderboard - Pretest (อสม. - On-Line)
-              </h2>
-            </div>
-            <ul className="divide-y divide-gray-100">
-              {(leaderboards.onlinePretest || []).map((user: any, index: number) => (
-                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-pink-50 transition-colors">
-                  <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-pink-100 text-pink-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                        <span className="bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
-                    </div>
-                  </div>
-                  <span className="text-lg font-black text-pink-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
-                </li>
-              ))}
-              {(!leaderboards.onlinePretest || leaderboards.onlinePretest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
-            </ul>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-md border border-pink-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-rose-500 to-red-500 px-6 py-4 border-b border-rose-100">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" /> Leaderboard - Posttest (อสม. - On-Line)
-              </h2>
-            </div>
-            <ul className="divide-y divide-gray-100">
-              {(leaderboards.onlinePosttest || []).map((user: any, index: number) => (
-                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-rose-50 transition-colors">
-                  <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                        <span className="bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
-                    </div>
-                  </div>
-                  <span className="text-lg font-black text-rose-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
-                </li>
-              ))}
-              {(!leaderboards.onlinePosttest || leaderboards.onlinePosttest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
-            </ul>
-          </div>
-        </div>
-
-        {/* Online Officer Leaderboards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl shadow-md border border-orange-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-4 border-b border-orange-100">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <LayoutDashboard className="w-5 h-5 mr-2" /> Leaderboard - Pretest (เจ้าหน้าที่ - On-Line)
-              </h2>
-            </div>
-            <ul className="divide-y divide-gray-100">
-              {(leaderboards.onlineOfficerPretest || []).map((user: any, index: number) => (
-                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-orange-50 transition-colors">
-                  <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-orange-100 text-orange-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                        <span className="bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
-                    </div>
-                  </div>
-                  <span className="text-lg font-black text-orange-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
-                </li>
-              ))}
-              {(!leaderboards.onlineOfficerPretest || leaderboards.onlineOfficerPretest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
-            </ul>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-md border border-orange-100 overflow-hidden">
-            <div className="bg-gradient-to-r from-amber-500 to-yellow-500 px-6 py-4 border-b border-amber-100">
-              <h2 className="text-lg font-bold text-white flex items-center">
-                <CheckCircle className="w-5 h-5 mr-2" /> Leaderboard - Posttest (เจ้าหน้าที่ - On-Line)
-              </h2>
-            </div>
-            <ul className="divide-y divide-gray-100">
-              {(leaderboards.onlineOfficerPosttest || []).map((user: any, index: number) => (
-                <li key={user.id} className="px-6 py-4 flex items-center justify-between hover:bg-amber-50 transition-colors">
-                  <div className="flex items-center">
-                    <span className="w-10 h-10 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center font-black mr-4 shadow-inner min-w-[40px]">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
-                        <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
-                        <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                        <span className="bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
-                      </p>
-                      <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
-                    </div>
                   </div>
                   <span className="text-lg font-black text-amber-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
                 </li>
