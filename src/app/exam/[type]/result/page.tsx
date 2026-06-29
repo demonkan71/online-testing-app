@@ -45,7 +45,24 @@ export default function ResultPage({ params }: { params: Promise<{ type: string 
             <div className="text-5xl font-black text-gray-900">
               {result.correctCount} <span className="text-2xl text-gray-400 font-medium">/ {result.total}</span>
             </div>
-            <p className="mt-2 text-emerald-600 font-semibold">{Number(result.score).toFixed(0)}%</p>
+            <p className="mt-2 text-emerald-600 font-semibold mb-4">{Number(result.score).toFixed(0)}%</p>
+            
+            {type === 'posttest' && (
+              <div className="mt-4 p-4 rounded-lg bg-gray-50 border border-gray-100">
+                <p className="text-sm text-gray-500 mb-1">ผลการประเมินของคุณอยู่ในเกณฑ์</p>
+                <div className={`text-2xl font-bold ${
+                  Number(result.score) >= 80 ? 'text-green-600' :
+                  Number(result.score) >= 55 ? 'text-blue-600' :
+                  Number(result.score) >= 30 ? 'text-yellow-600' :
+                  'text-red-600'
+                }`}>
+                  {Number(result.score) >= 80 ? 'ดีมาก' :
+                   Number(result.score) >= 55 ? 'ดี' :
+                   Number(result.score) >= 30 ? 'พอใช้' :
+                   'ควรทบทวน'}
+                </div>
+              </div>
+            )}
           </div>
 
           {result.pdfUrl && (
@@ -55,7 +72,7 @@ export default function ResultPage({ params }: { params: Promise<{ type: string 
                 <h3 className="text-lg font-bold">เกียรติบัตรของคุณพร้อมแล้ว!</h3>
               </div>
               <p className="text-sm text-emerald-800 mb-4">
-                คุณทำคะแนนได้ตามเกณฑ์ สามารถดาวน์โหลดเกียรติบัตรได้ทันที
+                ระบบได้ออกเกียรติบัตรให้คุณเรียบร้อยแล้ว สามารถดาวน์โหลดได้ทันที
               </p>
               <a 
                 href={result.pdfUrl} 

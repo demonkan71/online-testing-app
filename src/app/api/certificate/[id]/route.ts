@@ -16,8 +16,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       }
     });
 
-    if (!submission || !submission.isPassed) {
-      return NextResponse.json({ error: 'Certificate not found or user did not pass' }, { status: 404 });
+    if (!submission) {
+      return NextResponse.json({ error: 'Certificate not found' }, { status: 404 });
     }
 
     // Create a new PDFDocument

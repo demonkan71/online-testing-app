@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(req: Request) {
   try {
-    const { name, phone, hospital } = await req.json();
+    const { name, phone, hospital, district, occupation, attendanceType } = await req.json();
 
-    if (!name || !phone || !hospital) {
-      return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+    if (!name || !phone || !district || !occupation || !attendanceType) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     if (!/^\d{10}$/.test(phone)) {
@@ -20,13 +20,13 @@ export async function POST(req: Request) {
 
     if (!user) {
       user = await prisma.user.create({
-        data: { name, phone, hospital },
+        data: { name, phone, hospital, district, occupation, attendanceType },
       });
     } else {
-      // Update name/hospital if changed
+      // Update info if changed
       user = await prisma.user.update({
         where: { phone },
-        data: { name, hospital },
+        data: { name, hospital, district, occupation, attendanceType },
       });
     }
 

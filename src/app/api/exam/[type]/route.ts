@@ -79,7 +79,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ type: s
     // For POSTTEST, must be >= 80%
     const isPassed = examType === 'POSTTEST' ? score >= 80 : score >= 0; // Pretest always true for isPassed logic, or define another logic. Wait, let's just use score >= 50 for pretest pass/fail visually, but actual score is shown. The user said: "แสดงคะแนนตามจริงที่ทำได้ พร้อมสรุปว่า ผ่าน หรือ ไม่ผ่าน" (I'll use 50% for Pretest passing criteria, 80% for Posttest)
 
-    const isPassedStrict = examType === 'POSTTEST' ? score >= 80 : score >= 50;
+    const isPassedStrict = examType === 'POSTTEST' ? score >= 60 : score >= 50;
 
     const submission = await prisma.submission.create({
       data: {
@@ -94,7 +94,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ type: s
     });
 
     let pdfUrl = null;
-    if (examType === 'POSTTEST' && isPassedStrict) {
+    // Issue certificate for everyone who takes the POSTTEST, regardless of score
+    if (examType === 'POSTTEST') {
       // Create certificate record
       const cert = await prisma.certificate.create({
         data: {

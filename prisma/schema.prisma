@@ -11,13 +11,16 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(uuid())
-  name         String
-  phone        String        @unique
-  hospital     String
-  createdAt    DateTime      @default(now())
-  submissions  Submission[]
-  certificates Certificate[]
+  id             String        @id @default(uuid())
+  name           String
+  phone          String        @unique
+  district       String?
+  occupation     String?
+  attendanceType String?
+  hospital       String?
+  createdAt      DateTime      @default(now())
+  submissions    Submission[]
+  certificates   Certificate[]
 }
 
 model Exam {

@@ -2,11 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Stethoscope, User, Phone, Building, ClipboardEdit } from 'lucide-react';
+import { Stethoscope, User, Phone, Building, ClipboardEdit, MapPin, Briefcase, Video } from 'lucide-react';
+
+const DISTRICTS = [
+  'อ.เมือง', 'อ.ท่ามะกา', 'อ.ไทรโยค', 'อ.บ่อพลอย', 'อ.ท่าม่วง', 
+  'อ.ทองผาภูมิ', 'อ.สังขละบุรี', 'อ.พนมทวน', 'อ.เลาขวัญ', 
+  'อ.ด่านมะขามเตี้ย', 'อ.หนองปรือ', 'อ.ศรีสวัสดิ์', 'อ.ห้วยกระเจา'
+];
 
 export default function Home() {
   const router = useRouter();
-  const [formData, setFormData] = useState({ name: '', phone: '', hospital: '' });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    phone: '', 
+    district: '',
+    occupation: '',
+    attendanceType: '',
+    hospital: '' 
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -45,7 +58,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-white/50">
+      <div className="max-w-md w-full bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden border border-white/50 my-8">
         <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 text-white mb-4 shadow-inner">
             <Stethoscope size={32} />
@@ -99,21 +112,91 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">อาชีพ / หน่วยงาน</label>
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">อำเภอ</label>
               <div className="mt-1 relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Building className="h-5 w-5 text-gray-400" />
+                  <MapPin className="h-5 w-5 text-gray-400" />
                 </div>
-                <input
-                  type="text"
+                <select
                   required
                   className="focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-3 border bg-gray-50/50 hover:bg-gray-50 transition-colors"
-                  placeholder="เช่น พยาบาล / รพ.พหลพลพยุหเสนา"
-                  value={formData.hospital}
-                  onChange={(e) => setFormData({ ...formData, hospital: e.target.value })}
-                />
+                  value={formData.district}
+                  onChange={(e) => setFormData({ ...formData, district: e.target.value })}
+                >
+                  <option value="" disabled>-- เลือกอำเภอ --</option>
+                  {DISTRICTS.map((d) => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </select>
               </div>
             </div>
+
+            <div className="relative">
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">อาชีพ</label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Briefcase className="h-5 w-5 text-gray-400" />
+                </div>
+                <select
+                  required
+                  className="focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-3 border bg-gray-50/50 hover:bg-gray-50 transition-colors"
+                  value={formData.occupation}
+                  onChange={(e) => {
+                    setFormData({ 
+                      ...formData, 
+                      occupation: e.target.value,
+                      hospital: e.target.value === 'อสม.' ? '' : formData.hospital 
+                    });
+                  }}
+                >
+                  <option value="" disabled>-- เลือกอาชีพ --</option>
+                  <option value="อสม.">อสม.</option>
+                  <option value="เจ้าหน้าที่">เจ้าหน้าที่</option>
+                </select>
+              </div>
+            </div>
+
+            {formData.occupation === 'เจ้าหน้าที่' && (
+              <div className="relative">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">หน่วยงาน</label>
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Building className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <select
+                    required
+                    className="focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-3 border bg-gray-50/50 hover:bg-gray-50 transition-colors"
+                    value={formData.hospital}
+                    onChange={(e) => setFormData({ ...formData, hospital: e.target.value })}
+                  >
+                    <option value="" disabled>-- เลือกหน่วยงาน --</option>
+                    <option value="รพศ/รพท">รพศ/รพท</option>
+                    <option value="รพช.">รพช.</option>
+                    <option value="สสอ.">สสอ.</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
+            <div className="relative">
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">รูปแบบการเข้าร่วมประชุม</label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Video className="h-5 w-5 text-gray-400" />
+                </div>
+                <select
+                  required
+                  className="focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-lg py-3 border bg-gray-50/50 hover:bg-gray-50 transition-colors"
+                  value={formData.attendanceType}
+                  onChange={(e) => setFormData({ ...formData, attendanceType: e.target.value })}
+                >
+                  <option value="" disabled>-- เลือกรูปแบบ --</option>
+                  <option value="On-Site">On-Site</option>
+                  <option value="On-Line">On-Line</option>
+                </select>
+              </div>
+            </div>
+
           </div>
 
           <button

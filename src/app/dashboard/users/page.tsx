@@ -9,7 +9,7 @@ export default function UsersManagementPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState<string | null>(null);
-  const [editFormData, setEditFormData] = useState({ name: '', phone: '', hospital: '' });
+  const [editFormData, setEditFormData] = useState({ name: '', phone: '', hospital: '', district: '', occupation: '', attendanceType: '' });
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('ALL');
 
@@ -31,7 +31,7 @@ export default function UsersManagementPage() {
   }, []);
 
   const handleClearAll = async () => {
-    const confirmed = window.confirm("คำเตือน: คุณกำลังจะลบข้อมูลผู้เข้าร่วมการประเมินทั้งหมด รวมทั้งผลการสอบทั้งหมด\\n\\nคุณแน่ใจหรือไม่ที่จะดำเนินการนี้?");
+    const confirmed = window.confirm("คำเตือน: คุณกำลังจะลบข้อมูลผู้เข้าร่วมการประเมินทั้งหมด รวมทั้งผลการสอบทั้งหมด\n\nคุณแน่ใจหรือไม่ที่จะดำเนินการนี้?");
     if (!confirmed) return;
 
     try {
@@ -67,7 +67,14 @@ export default function UsersManagementPage() {
 
   const handleEditClick = (user: any) => {
     setEditMode(user.id);
-    setEditFormData({ name: user.name, phone: user.phone, hospital: user.hospital });
+    setEditFormData({ 
+      name: user.name, 
+      phone: user.phone, 
+      hospital: user.hospital || '',
+      district: user.district || '',
+      occupation: user.occupation || '',
+      attendanceType: user.attendanceType || ''
+    });
   };
 
   const handleSaveEdit = async (id: string) => {
@@ -100,29 +107,41 @@ export default function UsersManagementPage() {
 
   const filteredUsers = usersData ? usersData.filter((user: any) => {
     // Search match
-    const searchString = `${user.name} ${user.phone} ${user.hospital}`.toLowerCase();
+    const searchString = `${user.name} ${user.phone} ${user.hospital} ${user.district} ${user.occupation}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
     
     // Filter match
     let matchesFilter = true;
-    if (filterStatus === 'PASSED') matchesFilter = user.isPassed === true;
-    if (filterStatus === 'FAILED') matchesFilter = user.isPassed === false;
-    if (filterStatus === 'NOT_TAKEN') matchesFilter = user.isPassed === null;
+    if (filterStatus === 'อสม.') matchesFilter = user.occupation === 'อสม.';
+    if (filterStatus === 'เจ้าหน้าที่') matchesFilter = user.occupation === 'เจ้าหน้าที่';
+    if (filterStatus === 'On-Site') matchesFilter = user.attendanceType === 'On-Site';
+    if (filterStatus === 'On-Line') matchesFilter = user.attendanceType === 'On-Line';
 
     return matchesSearch && matchesFilter;
   }) : [];
 
+  const getEvaluation = (score: number | null) => {
+    if (score === null) return '-';
+    if (score >= 80) return 'ดีมาก';
+    if (score >= 55) return 'ดี';
+    if (score >= 30) return 'พอใช้';
+    return 'ควรทบทวน';
+  };
+
   const handleExportCSV = () => {
     if (!filteredUsers || filteredUsers.length === 0) return alert('ไม่มีข้อมูลสำหรับส่งออก');
     
-    const headers = ['ชื่อ - นามสกุล', 'เบอร์โทรศัพท์', 'หน่วยงาน', 'Pretest (%)', 'Posttest (%)', 'สถานะ'];
+    const headers = ['ชื่อ - นามสกุล', 'เบอร์โทรศัพท์', 'อำเภอ', 'อาชีพ', 'รูปแบบ', 'หน่วยงาน', 'Pretest (%)', 'Posttest (%)', 'ผลประเมิน Posttest'];
     const rows = filteredUsers.map((u: any) => [
       u.name,
       u.phone,
-      u.hospital,
+      u.district || '-',
+      u.occupation || '-',
+      u.attendanceType || '-',
+      u.hospital || '-',
       u.pretestScore !== null ? Number(u.pretestScore).toFixed(0) : '-',
       u.posttestScore !== null ? Number(u.posttestScore).toFixed(0) : '-',
-      u.isPassed === true ? 'ผ่าน' : u.isPassed === false ? 'ไม่ผ่าน' : 'ยังไม่ประเมิน'
+      getEvaluation(u.posttestScore)
     ]);
 
     const csvContent = [
@@ -134,14 +153,14 @@ export default function UsersManagementPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `ประเมินความรู้_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `ข้อมูลผู้ใช้_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-10">
+    <div className="space-y-6 max-w-[1400px] mx-auto pb-10">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <div>
           <h1 className="text-2xl font-bold text-gray-800 flex items-center">
@@ -182,9 +201,10 @@ export default function UsersManagementPage() {
                 className="pl-9 pr-8 py-2 border border-gray-200 rounded-lg text-sm appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-pink-500 w-full sm:w-auto"
               >
                 <option value="ALL">ทั้งหมด</option>
-                <option value="PASSED">สอบผ่าน</option>
-                <option value="FAILED">สอบไม่ผ่าน</option>
-                <option value="NOT_TAKEN">ยังไม่ประเมิน</option>
+                <option value="อสม.">เฉพาะ อสม.</option>
+                <option value="เจ้าหน้าที่">เฉพาะ เจ้าหน้าที่</option>
+                <option value="On-Site">เฉพาะ On-Site</option>
+                <option value="On-Line">เฉพาะ On-Line</option>
               </select>
             </div>
           </div>
@@ -204,17 +224,20 @@ export default function UsersManagementPage() {
               <tr>
                 <th className="px-4 py-4 font-bold">ชื่อ - นามสกุล</th>
                 <th className="px-4 py-4 font-bold">เบอร์โทรศัพท์</th>
+                <th className="px-4 py-4 font-bold">อำเภอ</th>
+                <th className="px-4 py-4 font-bold">อาชีพ</th>
+                <th className="px-4 py-4 font-bold">รูปแบบ</th>
                 <th className="px-4 py-4 font-bold">หน่วยงาน</th>
                 <th className="px-4 py-4 font-bold text-center">Pretest</th>
                 <th className="px-4 py-4 font-bold text-center">Posttest</th>
-                <th className="px-4 py-4 font-bold text-center">สถานะ</th>
+                <th className="px-4 py-4 font-bold text-center">ผลประเมิน</th>
                 <th className="px-4 py-4 font-bold text-center">จัดการ</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredUsers && filteredUsers.map((user: any) => (
                 <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-4 font-medium text-gray-900">
+                  <td className="px-4 py-4 font-medium text-gray-900 min-w-[150px]">
                     {editMode === user.id ? (
                       <input 
                         type="text" 
@@ -234,6 +257,40 @@ export default function UsersManagementPage() {
                       />
                     ) : user.phone}
                   </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    {editMode === user.id ? (
+                      <input 
+                        type="text" 
+                        value={editFormData.district} 
+                        onChange={e => setEditFormData({...editFormData, district: e.target.value})}
+                        className="w-full border rounded px-2 py-1 text-sm"
+                      />
+                    ) : (user.district || '-')}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    {editMode === user.id ? (
+                      <select 
+                        value={editFormData.occupation} 
+                        onChange={e => setEditFormData({...editFormData, occupation: e.target.value})}
+                        className="w-full border rounded px-2 py-1 text-sm"
+                      >
+                        <option value="อสม.">อสม.</option>
+                        <option value="เจ้าหน้าที่">เจ้าหน้าที่</option>
+                      </select>
+                    ) : (user.occupation || '-')}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    {editMode === user.id ? (
+                      <select 
+                        value={editFormData.attendanceType} 
+                        onChange={e => setEditFormData({...editFormData, attendanceType: e.target.value})}
+                        className="w-full border rounded px-2 py-1 text-sm"
+                      >
+                        <option value="On-Site">On-Site</option>
+                        <option value="On-Line">On-Line</option>
+                      </select>
+                    ) : (user.attendanceType || '-')}
+                  </td>
                   <td className="px-4 py-4">
                     {editMode === user.id ? (
                       <input 
@@ -242,7 +299,7 @@ export default function UsersManagementPage() {
                         onChange={e => setEditFormData({...editFormData, hospital: e.target.value})}
                         className="w-full border rounded px-2 py-1 text-sm"
                       />
-                    ) : user.hospital}
+                    ) : (user.hospital || '-')}
                   </td>
                   <td className="px-4 py-4 text-center font-semibold text-gray-700">
                     {user.pretestScore !== null ? Number(user.pretestScore).toFixed(0) + '%' : '-'}
@@ -251,17 +308,18 @@ export default function UsersManagementPage() {
                     {user.posttestScore !== null ? Number(user.posttestScore).toFixed(0) + '%' : '-'}
                   </td>
                   <td className="px-4 py-4 text-center">
-                    {user.isPassed === true ? (
-                      <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full flex items-center w-max mx-auto">
-                        <CheckCircle className="w-3 h-3 mr-1" /> ผ่าน
-                      </span>
-                    ) : user.isPassed === false ? (
-                      <span className="bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full flex items-center w-max mx-auto">
-                        <XCircle className="w-3 h-3 mr-1" /> ไม่ผ่าน
+                    {user.posttestScore !== null ? (
+                      <span className={`text-xs font-bold px-3 py-1 rounded-full flex items-center justify-center w-max mx-auto ${
+                        user.posttestScore >= 80 ? 'bg-green-100 text-green-800' :
+                        user.posttestScore >= 55 ? 'bg-blue-100 text-blue-800' :
+                        user.posttestScore >= 30 ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {getEvaluation(user.posttestScore)}
                       </span>
                     ) : (
                       <span className="bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full w-max mx-auto">
-                        ยังไม่ประเมิน
+                        ยังไม่ทำ
                       </span>
                     )}
                   </td>
@@ -304,7 +362,7 @@ export default function UsersManagementPage() {
               ))}
               {(!filteredUsers || filteredUsers.length === 0) && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={10} className="px-6 py-8 text-center text-gray-500">
                     ไม่พบข้อมูลผู้เข้าร่วมการประเมิน
                   </td>
                 </tr>
