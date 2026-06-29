@@ -263,13 +263,75 @@ export default function DashboardPage() {
         </div>
 
         {/* Officer Leaderboards */}
-                  </div>
-                  <span className="text-lg font-black text-amber-600 ml-4">{(Number(user.score) / 5).toFixed(0)}/20</span>
-                </li>
-              ))}
-              {(!leaderboards.onlineOfficerPosttest || leaderboards.onlineOfficerPosttest.length === 0) && <li className="px-6 py-8 text-sm text-gray-500 text-center">ยังไม่มีข้อมูล</li>}
-            </ul>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <CollapsibleLeaderboard 
+            title="Leaderboard - Pretest (เฉพาะเจ้าหน้าที่)"
+            icon={LayoutDashboard}
+            dataList={leaderboards.officerPretest}
+            gradientClass="bg-gradient-to-r from-blue-500 to-indigo-500"
+            borderColor="border-blue-100"
+            iconBgColor="bg-blue-100 text-blue-800"
+            scoreColor="text-blue-600"
+            hoverBg="hover:bg-blue-50"
+          />
+          <CollapsibleLeaderboard 
+            title="Leaderboard - Posttest (เฉพาะเจ้าหน้าที่)"
+            icon={CheckCircle}
+            dataList={leaderboards.officerPosttest}
+            gradientClass="bg-gradient-to-r from-indigo-500 to-purple-500"
+            borderColor="border-blue-100"
+            iconBgColor="bg-indigo-100 text-indigo-800"
+            scoreColor="text-indigo-600"
+            hoverBg="hover:bg-indigo-50"
+          />
+        </div>
+
+        {/* Leaderboards - Online */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <CollapsibleLeaderboard 
+            title="Leaderboard - Pretest (อสม. - On-Line)"
+            icon={LayoutDashboard}
+            dataList={leaderboards.onlinePretest}
+            gradientClass="bg-gradient-to-r from-pink-500 to-rose-500"
+            borderColor="border-pink-100"
+            iconBgColor="bg-pink-100 text-pink-800"
+            scoreColor="text-pink-600"
+            hoverBg="hover:bg-pink-50"
+          />
+          <CollapsibleLeaderboard 
+            title="Leaderboard - Posttest (อสม. - On-Line)"
+            icon={CheckCircle}
+            dataList={leaderboards.onlinePosttest}
+            gradientClass="bg-gradient-to-r from-rose-500 to-red-500"
+            borderColor="border-pink-100"
+            iconBgColor="bg-rose-100 text-rose-800"
+            scoreColor="text-rose-600"
+            hoverBg="hover:bg-rose-50"
+          />
+        </div>
+
+        {/* Officer Leaderboards - Online */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <CollapsibleLeaderboard 
+            title="Leaderboard - Pretest (เจ้าหน้าที่ - On-Line)"
+            icon={LayoutDashboard}
+            dataList={leaderboards.onlineOfficerPretest}
+            gradientClass="bg-gradient-to-r from-orange-500 to-amber-500"
+            borderColor="border-orange-100"
+            iconBgColor="bg-orange-100 text-orange-800"
+            scoreColor="text-orange-600"
+            hoverBg="hover:bg-orange-50"
+          />
+          <CollapsibleLeaderboard 
+            title="Leaderboard - Posttest (เจ้าหน้าที่ - On-Line)"
+            icon={CheckCircle}
+            dataList={leaderboards.onlineOfficerPosttest}
+            gradientClass="bg-gradient-to-r from-amber-500 to-yellow-500"
+            borderColor="border-orange-100"
+            iconBgColor="bg-amber-100 text-amber-800"
+            scoreColor="text-amber-600"
+            hoverBg="hover:bg-amber-50"
+          />
         </div>
 
     </div>
