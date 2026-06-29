@@ -160,7 +160,7 @@ export default function UserDashboard() {
           <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl shadow-md p-8 text-center text-white">
             <FileText className="w-16 h-16 mx-auto mb-4 text-emerald-200" />
             <h2 className="text-2xl font-bold mb-2">ยินดีด้วย! คุณได้รับเกียรติบัตร</h2>
-            <p className="text-emerald-100 mb-6">คุณทำคะแนนได้ตามเกณฑ์ 80% ระบบได้ออกเกียรติบัตรให้คุณเรียบร้อยแล้ว</p>
+            <p className="text-emerald-100 mb-6">จัดทำโดย : สมาคมแม่บ้านสาธารณสุข สาขาจังหวัดกาญจนบุรี</p>
             <a 
               href={data.certificateUrl}
               target="_blank"
