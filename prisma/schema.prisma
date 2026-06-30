@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,19 +11,19 @@ model User {
   id             String        @id @default(uuid())
   name           String
   phone          String        @unique
-  district       String?
-  occupation     String?
-  attendanceType String?
   hospital       String?
   createdAt      DateTime      @default(now())
-  submissions    Submission[]
+  attendanceType String?
+  district       String?
+  occupation     String?
   certificates   Certificate[]
+  submissions    Submission[]
 }
 
 model Exam {
   id          String       @id @default(uuid())
   title       String
-  type        String       // "PRETEST" or "POSTTEST"
+  type        String
   createdAt   DateTime     @default(now())
   questions   Question[]
   submissions Submission[]
@@ -35,49 +32,49 @@ model Exam {
 model Question {
   id            String             @id @default(uuid())
   examId        String
-  exam          Exam               @relation(fields: [examId], references: [id], onDelete: Cascade)
   content       String
   optionA       String
   optionB       String
   optionC       String
   optionD       String
-  correctOption String             // "A", "B", "C", or "D"
+  correctOption String
+  exam          Exam               @relation(fields: [examId], references: [id], onDelete: Cascade)
   answers       SubmissionAnswer[]
 }
 
 model Submission {
   id        String             @id @default(uuid())
   userId    String
-  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   examId    String
-  exam      Exam               @relation(fields: [examId], references: [id], onDelete: Cascade)
   score     Float
   isPassed  Boolean
   createdAt DateTime           @default(now())
+  exam      Exam               @relation(fields: [examId], references: [id], onDelete: Cascade)
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   answers   SubmissionAnswer[]
 }
 
 model SubmissionAnswer {
   id             String     @id @default(uuid())
   submissionId   String
-  submission     Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
   questionId     String
-  question       Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  selectedOption String     // "A", "B", "C", or "D"
+  selectedOption String
   isCorrect      Boolean
+  question       Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  submission     Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 }
 
 model Certificate {
   id          String   @id @default(uuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   pdfUrl      String
   isEmailSent Boolean  @default(false)
   createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model SystemSetting {
   key       String   @id
-  value     String   @db.Text
+  value     String
   updatedAt DateTime @updatedAt
 }

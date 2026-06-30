@@ -44,7 +44,7 @@ export async function GET() {
     const osmUsers = allUsers.filter(u => u.occupation === 'อสม.');
     const officerUsers = allUsers.filter(u => u.occupation === 'เจ้าหน้าที่');
     const onsiteUsers = allUsers.filter(u => u.attendanceType === 'On-Site');
-    const onlineUsers = allUsers.filter(u => u.attendanceType === 'On-Line');
+    const onlineUsers = allUsers.filter(u => u.attendanceType === 'On-line');
 
     const getPassFailCounts = (users: any[]) => {
       let passed = 0;
@@ -104,10 +104,10 @@ export async function GET() {
     const officerPretestLeaderboard = getLeaderboard(pretestSubmissions, 'On-Site', s => s.user.occupation === 'เจ้าหน้าที่');
     const officerPosttestLeaderboard = getLeaderboard(posttestSubmissions, 'On-Site', s => s.user.occupation === 'เจ้าหน้าที่');
 
-    const onlinePretestLeaderboard = getLeaderboard(pretestSubmissions, 'On-Line', s => s.user.occupation === 'อสม.');
-    const onlinePosttestLeaderboard = getLeaderboard(posttestSubmissions, 'On-Line', s => s.user.occupation === 'อสม.');
-    const onlineOfficerPretestLeaderboard = getLeaderboard(pretestSubmissions, 'On-Line', s => s.user.occupation === 'เจ้าหน้าที่');
-    const onlineOfficerPosttestLeaderboard = getLeaderboard(posttestSubmissions, 'On-Line', s => s.user.occupation === 'เจ้าหน้าที่');
+    const onlinePretestLeaderboard = getLeaderboard(pretestSubmissions, 'On-line', s => s.user.occupation === 'อสม.');
+    const onlinePosttestLeaderboard = getLeaderboard(posttestSubmissions, 'On-line', s => s.user.occupation === 'อสม.');
+    const onlineOfficerPretestLeaderboard = getLeaderboard(pretestSubmissions, 'On-line', s => s.user.occupation === 'เจ้าหน้าที่');
+    const onlineOfficerPosttestLeaderboard = getLeaderboard(posttestSubmissions, 'On-line', s => s.user.occupation === 'เจ้าหน้าที่');
 
     const questionErrorMap: Record<string, { content: string, count: number }> = {};
     incorrectAnswers.forEach(ans => {

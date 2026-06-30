@@ -115,7 +115,7 @@ export default function UsersManagementPage() {
     if (filterStatus === 'อสม.') matchesFilter = user.occupation === 'อสม.';
     if (filterStatus === 'เจ้าหน้าที่') matchesFilter = user.occupation === 'เจ้าหน้าที่';
     if (filterStatus === 'On-Site') matchesFilter = user.attendanceType === 'On-Site';
-    if (filterStatus === 'On-Line') matchesFilter = user.attendanceType === 'On-Line';
+    if (filterStatus === 'On-line') matchesFilter = user.attendanceType === 'On-line';
 
     return matchesSearch && matchesFilter;
   }) : [];
@@ -204,7 +204,7 @@ export default function UsersManagementPage() {
                 <option value="อสม.">เฉพาะ อสม.</option>
                 <option value="เจ้าหน้าที่">เฉพาะ เจ้าหน้าที่</option>
                 <option value="On-Site">เฉพาะ On-Site</option>
-                <option value="On-Line">เฉพาะ On-Line</option>
+                <option value="On-line">เฉพาะ On-line</option>
               </select>
             </div>
           </div>
@@ -287,7 +287,7 @@ export default function UsersManagementPage() {
                         className="w-full border rounded px-2 py-1 text-sm"
                       >
                         <option value="On-Site">On-Site</option>
-                        <option value="On-Line">On-Line</option>
+                        <option value="On-line">On-line</option>
                       </select>
                     ) : (user.attendanceType || '-')}
                   </td>

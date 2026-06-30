@@ -178,7 +178,7 @@ export default function DashboardPage() {
             }
           />
           <MetricCard 
-            title="รูปแบบ On-Line" 
+            title="รูปแบบ On-line" 
             value={advanced.online.total} 
             icon={MonitorPlay} 
             colorClass="bg-pink-600" 
@@ -294,7 +294,7 @@ export default function DashboardPage() {
         {/* Leaderboards - Online */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <CollapsibleLeaderboard 
-            title="Leaderboard - Pretest (อสม. - On-Line)"
+            title="Leaderboard - Pretest (อสม. - On-line)"
             icon={LayoutDashboard}
             dataList={leaderboards.onlinePretest}
             gradientClass="bg-gradient-to-r from-pink-500 to-rose-500"
@@ -305,7 +305,7 @@ export default function DashboardPage() {
             badgeColor="bg-pink-50 text-pink-600"
           />
           <CollapsibleLeaderboard 
-            title="Leaderboard - Posttest (อสม. - On-Line)"
+            title="Leaderboard - Posttest (อสม. - On-line)"
             icon={CheckCircle}
             dataList={leaderboards.onlinePosttest}
             gradientClass="bg-gradient-to-r from-rose-500 to-red-500"
@@ -320,7 +320,7 @@ export default function DashboardPage() {
         {/* Officer Leaderboards - Online */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <CollapsibleLeaderboard 
-            title="Leaderboard - Pretest (เจ้าหน้าที่ - On-Line)"
+            title="Leaderboard - Pretest (เจ้าหน้าที่ - On-line)"
             icon={LayoutDashboard}
             dataList={leaderboards.onlineOfficerPretest}
             gradientClass="bg-gradient-to-r from-orange-500 to-amber-500"
@@ -331,7 +331,7 @@ export default function DashboardPage() {
             badgeColor="bg-orange-50 text-orange-600"
           />
           <CollapsibleLeaderboard 
-            title="Leaderboard - Posttest (เจ้าหน้าที่ - On-Line)"
+            title="Leaderboard - Posttest (เจ้าหน้าที่ - On-line)"
             icon={CheckCircle}
             dataList={leaderboards.onlineOfficerPosttest}
             gradientClass="bg-gradient-to-r from-amber-500 to-yellow-500"

@@ -193,7 +193,7 @@ export default function Home() {
                 >
                   <option value="" disabled>-- เลือกรูปแบบ --</option>
                   <option value="On-Site">On-Site</option>
-                  <option value="On-Line">On-Line</option>
+                  <option value="On-line">On-line</option>
                 </select>
               </div>
             </div>
