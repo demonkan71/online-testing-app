@@ -12,7 +12,8 @@ const CollapsibleLeaderboard = ({
   borderColor, 
   iconBgColor, 
   scoreColor, 
-  hoverBg 
+  hoverBg,
+  badgeColor
 }: any) => {
   const [isOpen, setIsOpen] = useState(false);
   
@@ -42,7 +43,7 @@ const CollapsibleLeaderboard = ({
                   <p className="text-xs text-gray-500 flex items-center gap-2 mt-1">
                     <span className="flex items-center"><MapPin className="w-3 h-3 mr-0.5" /> {user.district || '-'}</span>
                     <span className="bg-gray-100 px-2 py-0.5 rounded-full">{user.occupation || '-'}</span>
-                    <span className="bg-gray-50 text-gray-600 px-2 py-0.5 rounded-full">{user.attendanceType || '-'}</span>
+                    <span className={`${badgeColor || 'bg-gray-50 text-gray-600'} px-2 py-0.5 rounded-full`}>{user.attendanceType || '-'}</span>
                   </p>
                   <p className="text-[10px] text-gray-400 mt-1">ส่งเมื่อ: {new Date(user.submittedAt).toLocaleString('th-TH')}</p>
                 </div>
@@ -249,6 +250,7 @@ export default function DashboardPage() {
             iconBgColor="bg-emerald-100 text-emerald-800"
             scoreColor="text-emerald-600"
             hoverBg="hover:bg-emerald-50"
+            badgeColor="bg-emerald-50 text-emerald-600"
           />
           <CollapsibleLeaderboard 
             title="Leaderboard - Posttest (อสม.)"
@@ -259,6 +261,7 @@ export default function DashboardPage() {
             iconBgColor="bg-green-100 text-green-800"
             scoreColor="text-green-600"
             hoverBg="hover:bg-green-50"
+            badgeColor="bg-green-50 text-green-600"
           />
         </div>
 
@@ -273,6 +276,7 @@ export default function DashboardPage() {
             iconBgColor="bg-blue-100 text-blue-800"
             scoreColor="text-blue-600"
             hoverBg="hover:bg-blue-50"
+            badgeColor="bg-blue-50 text-blue-600"
           />
           <CollapsibleLeaderboard 
             title="Leaderboard - Posttest (เฉพาะเจ้าหน้าที่)"
@@ -283,6 +287,7 @@ export default function DashboardPage() {
             iconBgColor="bg-indigo-100 text-indigo-800"
             scoreColor="text-indigo-600"
             hoverBg="hover:bg-indigo-50"
+            badgeColor="bg-indigo-50 text-indigo-600"
           />
         </div>
 
@@ -297,6 +302,7 @@ export default function DashboardPage() {
             iconBgColor="bg-pink-100 text-pink-800"
             scoreColor="text-pink-600"
             hoverBg="hover:bg-pink-50"
+            badgeColor="bg-pink-50 text-pink-600"
           />
           <CollapsibleLeaderboard 
             title="Leaderboard - Posttest (อสม. - On-Line)"
@@ -307,6 +313,7 @@ export default function DashboardPage() {
             iconBgColor="bg-rose-100 text-rose-800"
             scoreColor="text-rose-600"
             hoverBg="hover:bg-rose-50"
+            badgeColor="bg-rose-50 text-rose-600"
           />
         </div>
 
@@ -321,6 +328,7 @@ export default function DashboardPage() {
             iconBgColor="bg-orange-100 text-orange-800"
             scoreColor="text-orange-600"
             hoverBg="hover:bg-orange-50"
+            badgeColor="bg-orange-50 text-orange-600"
           />
           <CollapsibleLeaderboard 
             title="Leaderboard - Posttest (เจ้าหน้าที่ - On-Line)"
@@ -331,6 +339,7 @@ export default function DashboardPage() {
             iconBgColor="bg-amber-100 text-amber-800"
             scoreColor="text-amber-600"
             hoverBg="hover:bg-amber-50"
+            badgeColor="bg-amber-50 text-amber-600"
           />
         </div>
 
