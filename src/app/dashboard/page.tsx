@@ -75,6 +75,12 @@ export default function DashboardPage() {
       }
     };
     fetchDashboard();
+
+    // Auto-polling every 10 seconds (10000 ms)
+    const intervalId = setInterval(fetchDashboard, 10000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-50">กำลังโหลดข้อมูล Dashboard...</div>;
