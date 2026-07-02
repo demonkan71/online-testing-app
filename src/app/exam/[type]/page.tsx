@@ -19,7 +19,8 @@ export default function ExamPage({ params }: { params: Promise<{ type: string }>
           const data = await res.json();
           setExam(data);
         } else {
-          alert('ไม่พบแบบทดสอบ');
+          const errorData = await res.json().catch(() => null);
+          alert(errorData?.error || 'ไม่พบแบบทดสอบ');
           router.push('/');
         }
       } catch (e) {
