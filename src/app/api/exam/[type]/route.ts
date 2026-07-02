@@ -9,6 +9,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ type: st
       return NextResponse.json({ error: 'Invalid exam type' }, { status: 400 });
     }
 
+    // Check if exam system is open
+    const systemStatus = await prisma.systemSetting.findUnique({ where: { key: 'SYSTEM_EXAM_OPEN' } });
+    if (systemStatus && systemStatus.value === 'false') {
+      return NextResponse.json({ error: 'ระบบปิดรับการทดสอบแล้วในขณะนี้' }, { status: 403 });
+    }
+
     const exam = await prisma.exam.findFirst({
       where: { type: examType },
       include: {
@@ -45,6 +51,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ type: s
 
     if (!userId || !answers) {
       return NextResponse.json({ error: 'Missing userId or answers' }, { status: 400 });
+    }
+
+    // Check if exam system is open
+    const systemStatus = await prisma.systemSetting.findUnique({ where: { key: 'SYSTEM_EXAM_OPEN' } });
+    if (systemStatus && systemStatus.value === 'false') {
+      return NextResponse.json({ error: 'ระบบปิดรับการทดสอบแล้ว ไม่สามารถส่งคำตอบได้' }, { status: 403 });
     }
 
     const exam = await prisma.exam.findFirst({

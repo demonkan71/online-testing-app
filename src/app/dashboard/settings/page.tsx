@@ -9,6 +9,7 @@ export default function SettingsPage() {
   const [bgImageBase64, setBgImageBase64] = useState('');
   const [yPos, setYPos] = useState('359'); // Default Y position (height - 236)
   const [fontSize, setFontSize] = useState('40'); // Default Font Size
+  const [isExamOpen, setIsExamOpen] = useState(true); // Default open
 
   useEffect(() => {
     fetchSettings();
@@ -23,6 +24,7 @@ export default function SettingsPage() {
       if (data.CERTIFICATE_BG) setBgImageBase64(data.CERTIFICATE_BG);
       if (data.CERTIFICATE_Y_POS) setYPos(data.CERTIFICATE_Y_POS);
       if (data.CERTIFICATE_FONT_SIZE) setFontSize(data.CERTIFICATE_FONT_SIZE);
+      if (data.SYSTEM_EXAM_OPEN === 'false') setIsExamOpen(false);
     } catch (e) {
       console.error(e);
     } finally {
@@ -54,6 +56,7 @@ export default function SettingsPage() {
         CERTIFICATE_BG: bgImageBase64,
         CERTIFICATE_Y_POS: yPos,
         CERTIFICATE_FONT_SIZE: fontSize,
+        SYSTEM_EXAM_OPEN: isExamOpen.toString(),
       };
 
       const res = await fetch('/api/settings', {
@@ -98,6 +101,29 @@ export default function SettingsPage() {
       </div>
 
       <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 space-y-8">
+        
+        {/* System Status Toggle */}
+        <div>
+          <h3 className="text-lg font-bold text-gray-800 mb-4">สถานะระบบสอบ</h3>
+          <div className="flex items-center justify-between p-4 border rounded-xl bg-gray-50">
+            <div>
+              <p className="font-semibold text-gray-800">เปิด-ปิด รับการส่งข้อสอบ</p>
+              <p className="text-sm text-gray-500">หากปิดระบบ ผู้เข้าสอบจะไม่สามารถเข้าทำแบบทดสอบหรือส่งคำตอบได้</p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                className="sr-only peer"
+                checked={isExamOpen}
+                onChange={() => setIsExamOpen(!isExamOpen)}
+              />
+              <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+          </div>
+        </div>
+
+        <hr className="border-gray-100" />
+
         {/* Certificate BG */}
         <div>
           <h3 className="text-lg font-bold text-gray-800 flex items-center mb-4">
