@@ -61,8 +61,13 @@ export default function ExamPage({ params }: { params: Promise<{ type: string }>
         localStorage.setItem('examResult', JSON.stringify(result));
         router.push(`/exam/${type}/result`);
       } else {
-        alert('เกิดข้อผิดพลาดในการส่งคำตอบ');
-        setSubmitting(false);
+        const errorData = await res.json().catch(() => null);
+        alert(errorData?.error || 'เกิดข้อผิดพลาดในการส่งคำตอบ');
+        if (res.status === 403) {
+          router.push('/user/dashboard');
+        } else {
+          setSubmitting(false);
+        }
       }
     } catch (e) {
       console.error(e);

@@ -56,6 +56,18 @@ export async function POST(req: Request, { params }: { params: Promise<{ type: s
       return NextResponse.json({ error: 'Exam not found' }, { status: 404 });
     }
 
+    // Anti-cheating: Prevent multiple submissions
+    const existingSubmission = await prisma.submission.findFirst({
+      where: {
+        userId,
+        examId: exam.id
+      }
+    });
+
+    if (existingSubmission) {
+      return NextResponse.json({ error: 'คุณได้ส่งแบบทดสอบนี้ไปแล้ว ไม่สามารถส่งซ้ำได้เพื่อป้องกันการทุจริต' }, { status: 403 });
+    }
+
     let correctCount = 0;
     const submissionAnswersData = [];
 
