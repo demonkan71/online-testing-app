@@ -35,17 +35,6 @@ export async function GET() {
       })
     ]);
 
-    const totalUsers = allUsers.length;
-    const totalPassed = posttestSubmissions.filter(s => s.isPassed).length;
-    const totalFailed = posttestSubmissions.filter(s => !s.isPassed).length;
-    const pretestPassed = pretestSubmissions.filter(s => s.isPassed).length;
-
-    // Advanced Metrics for Occupation and Attendance
-    const osmUsers = allUsers.filter(u => u.occupation === 'อสม.');
-    const officerUsers = allUsers.filter(u => u.occupation === 'เจ้าหน้าที่');
-    const onsiteUsers = allUsers.filter(u => u.attendanceType === 'On-Site');
-    const onlineUsers = allUsers.filter(u => u.attendanceType === 'On-line');
-
     const getPassFailCounts = (users: any[]) => {
       let passed = 0;
       let failed = 0;
@@ -58,6 +47,24 @@ export async function GET() {
       });
       return { total: users.length, passed, failed };
     };
+
+    const overallStats = getPassFailCounts(allUsers);
+    const totalPassed = overallStats.passed;
+    const totalFailed = overallStats.failed;
+    
+    let pretestPassed = 0;
+    allUsers.forEach(u => {
+      const pretest = u.submissions.find((s: any) => s.exam.type === 'PRETEST');
+      if (pretest && pretest.isPassed) pretestPassed++;
+    });
+
+    const totalUsers = allUsers.length;
+
+    // Advanced Metrics for Occupation and Attendance
+    const osmUsers = allUsers.filter(u => u.occupation === 'อสม.');
+    const officerUsers = allUsers.filter(u => u.occupation === 'เจ้าหน้าที่');
+    const onsiteUsers = allUsers.filter(u => u.attendanceType === 'On-Site');
+    const onlineUsers = allUsers.filter(u => u.attendanceType === 'On-line');
 
     const advancedMetrics = {
       osm: getPassFailCounts(osmUsers),
